@@ -1,0 +1,349 @@
+{
+  "info": {
+    "name": "API-Produtos",
+    "_postman_id": "b1a2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+    "description": "Plano de testes da API RESTful de Produtos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://minha-api-produtos.onrender.com",
+      "type": "string"
+    },
+    {
+      "key": "novoProdutoId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "01 - GET /produtos - Consultar todos os produtos",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/produtos",
+          "host": ["{{baseUrl}}"],
+          "path": ["produtos"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status deve ser 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Resposta deve ser um array\", function () {",
+              "    const dados = pm.response.json();",
+              "    pm.expect(dados).to.be.an(\"array\");",
+              "});",
+              "",
+              "pm.test(\"Array deve conter ao menos 1 produto\", function () {",
+              "    const dados = pm.response.json();",
+              "    pm.expect(dados.length).to.be.above(0);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - GET /produtos/:id - Consultar produto existente",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/produtos/1",
+          "host": ["{{baseUrl}}"],
+          "path": ["produtos", "1"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status deve ser 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Produto deve possuir os atributos esperados\", function () {",
+              "    const produto = pm.response.json();",
+              "    pm.expect(produto).to.have.property(\"id\");",
+              "    pm.expect(produto).to.have.property(\"descricao\");",
+              "    pm.expect(produto).to.have.property(\"preco\");",
+              "    pm.expect(produto).to.have.property(\"categoria\");",
+              "    pm.expect(produto).to.have.property(\"estoque\");",
+              "});",
+              "",
+              "pm.test(\"Id retornado deve ser 1\", function () {",
+              "    const produto = pm.response.json();",
+              "    pm.expect(produto.id).to.eql(1);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 - GET /produtos/:id - Consultar produto inexistente",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/produtos/9999",
+          "host": ["{{baseUrl}}"],
+          "path": ["produtos", "9999"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status deve ser 404\", function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 - POST /produtos - Cadastrar novo produto",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"descricao\": \"Monitor 24 polegadas\",\n  \"preco\": 899.90,\n  \"categoria\": \"Monitores\",\n  \"estoque\": 8\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/produtos",
+          "host": ["{{baseUrl}}"],
+          "path": ["produtos"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status deve ser 201\", function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test(\"Produto criado deve possuir id\", function () {",
+              "    const produto = pm.response.json();",
+              "    pm.expect(produto).to.have.property(\"id\");",
+              "    pm.collectionVariables.set(\"novoProdutoId\", produto.id);",
+              "});",
+              "",
+              "pm.test(\"Descricao deve ser igual a enviada\", function () {",
+              "    const produto = pm.response.json();",
+              "    pm.expect(produto.descricao).to.eql(\"Monitor 24 polegadas\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 - GET /produtos/:id - Consultar produto recem-cadastrado",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/produtos/{{novoProdutoId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["produtos", "{{novoProdutoId}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status deve ser 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Id deve corresponder ao produto recem-criado\", function () {",
+              "    const produto = pm.response.json();",
+              "    pm.expect(String(produto.id)).to.eql(pm.collectionVariables.get(\"novoProdutoId\"));",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 - PUT /produtos/:id - Alterar produto existente",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"descricao\": \"Monitor LED 24 polegadas\",\n  \"preco\": 849.90,\n  \"categoria\": \"Monitores\",\n  \"estoque\": 12\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/produtos/{{novoProdutoId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["produtos", "{{novoProdutoId}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status deve ser 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Descricao deve ter sido alterada\", function () {",
+              "    const produto = pm.response.json();",
+              "    pm.expect(produto.descricao).to.eql(\"Monitor LED 24 polegadas\");",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "07 - GET /produtos/:id - Verificar alteracao realizada",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/produtos/{{novoProdutoId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["produtos", "{{novoProdutoId}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status deve ser 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test(\"Preco deve refletir a alteracao\", function () {",
+              "    const produto = pm.response.json();",
+              "    pm.expect(produto.preco).to.eql(849.90);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "08 - PUT /produtos/:id - Alterar produto inexistente",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"descricao\": \"Produto Fantasma\",\n  \"preco\": 10.0,\n  \"categoria\": \"Inexistente\",\n  \"estoque\": 0\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/produtos/9999",
+          "host": ["{{baseUrl}}"],
+          "path": ["produtos", "9999"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status deve ser 404\", function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "09 - DELETE /produtos/:id - Excluir produto existente",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/produtos/{{novoProdutoId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["produtos", "{{novoProdutoId}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status deve ser 204\", function () {",
+              "    pm.response.to.have.status(204);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "10 - GET /produtos/:id - Verificar que produto excluido nao existe mais",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/produtos/{{novoProdutoId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["produtos", "{{novoProdutoId}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status deve ser 404\", function () {",
+              "    pm.response.to.have.status(404);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    }
+  ]
+}
