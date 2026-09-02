@@ -1,9 +1,11 @@
 const express = require('express');
+const path = require('path');
 
 const app = express();
 
-
 app.use(express.json());
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 let produtos = [
@@ -17,14 +19,9 @@ let produtos = [
 let proximoId = produtos.length + 1;
 
 
-app.get('/', (req, res) => {
-  res.json({ mensagem: 'API de Produtos no ar. Use /produtos.' });
-});
-
 app.get('/produtos', (req, res) => {
   res.status(200).json(produtos);
 });
-
 
 app.get('/produtos/:id', (req, res) => {
   const id = parseInt(req.params.id);
@@ -41,7 +38,6 @@ app.get('/produtos/:id', (req, res) => {
 app.post('/produtos', (req, res) => {
   const { descricao, preco, categoria, estoque } = req.body;
 
-
   if (!descricao || preco === undefined || !categoria || estoque === undefined) {
     return res.status(400).json({
       erro: 'Campos obrigatórios: descricao, preco, categoria, estoque'
@@ -51,9 +47,9 @@ app.post('/produtos', (req, res) => {
   const novoProduto = {
     id: proximoId++,
     descricao,
-    preco,
+    preco: Number(preco),
     categoria,
-    estoque
+    estoque: Number(estoque)
   };
 
   produtos.push(novoProduto);
@@ -73,12 +69,13 @@ app.put('/produtos/:id', (req, res) => {
   const { descricao, preco, categoria, estoque } = req.body;
 
   if (descricao !== undefined) produto.descricao = descricao;
-  if (preco !== undefined) produto.preco = preco;
+  if (preco !== undefined) produto.preco = Number(preco);
   if (categoria !== undefined) produto.categoria = categoria;
-  if (estoque !== undefined) produto.estoque = estoque;
+  if (estoque !== undefined) produto.estoque = Number(estoque);
 
   res.status(200).json(produto);
 });
+
 
 app.delete('/produtos/:id', (req, res) => {
   const id = parseInt(req.params.id);
@@ -93,8 +90,9 @@ app.delete('/produtos/:id', (req, res) => {
   res.status(204).send();
 });
 
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`API de Produtos rodando na porta ${PORT}`);
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
 });

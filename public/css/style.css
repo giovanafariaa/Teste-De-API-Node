@@ -1,0 +1,317 @@
+:root {
+  --bg: #f7f5f0;
+  --surface: #ffffff;
+  --ink: #21262b;
+  --ink-soft: #5b6167;
+  --line: #dad5c8;
+  --accent: #3a5a40;
+  --accent-soft: #e7eee5;
+  --warn: #a63d40;
+  --warn-soft: #f5e4e1;
+
+  --serif: "Spectral", Georgia, serif;
+  --sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --mono: "IBM Plex Mono", "SFMono-Regular", Menlo, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+
+.topo {
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+  padding: 2rem 1.5rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.topo-marca {
+  margin: 0 0 0.35rem;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+  color: var(--ink-soft);
+}
+
+.topo h1 {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 2rem;
+  color: var(--ink);
+}
+
+.topo-contagem {
+  text-align: right;
+}
+
+.topo-contagem span {
+  font-family: var(--serif);
+  font-size: 2.25rem;
+  font-weight: 600;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.topo-contagem p {
+  margin: 0.15rem 0 0;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+
+.painel-formulario {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 1.5rem 1.75rem 1.75rem;
+}
+
+.painel-cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.1rem;
+}
+
+.painel-cabecalho h2 {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+.botao-texto {
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0.2rem 0;
+}
+
+.botao-texto:hover {
+  color: var(--warn);
+}
+
+#formProduto {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.4fr 1fr;
+  gap: 1rem 1rem;
+  align-items: end;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.campo label {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
+
+.campo input {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.campo input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  background: var(--surface);
+}
+
+.campo-acao {
+  grid-column: 1 / -1;
+  align-items: flex-start;
+}
+
+#botaoSalvar {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: 4px;
+  padding: 0.65rem 1.4rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+#botaoSalvar:hover {
+  background: #2e4732;
+}
+
+#botaoSalvar:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.mensagem {
+  margin: 1rem 0 0;
+  font-size: 0.85rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 4px;
+}
+
+.mensagem.sucesso {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.mensagem.erro {
+  background: var(--warn-soft);
+  color: var(--warn);
+}
+
+
+.painel-lista {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.tabela-produtos {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabela-produtos th,
+.tabela-produtos td {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.9rem;
+}
+
+.tabela-produtos thead th {
+  font-family: var(--sans);
+  font-weight: 500;
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+  border-bottom: 1px solid var(--ink);
+}
+
+.tabela-produtos tbody tr:hover {
+  background: var(--bg);
+}
+
+.tabela-produtos tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.col-id,
+.col-preco,
+.col-estoque {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.col-id {
+  color: var(--ink-soft);
+  width: 3.5rem;
+}
+
+.col-preco {
+  width: 7rem;
+}
+
+.col-estoque {
+  width: 5.5rem;
+}
+
+.col-acoes {
+  width: 9.5rem;
+}
+
+.acoes-linha {
+  display: flex;
+  gap: 0.9rem;
+}
+
+.acoes-linha button {
+  background: none;
+  border: none;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.botao-editar {
+  color: var(--accent);
+}
+
+.botao-editar:hover {
+  color: #2e4732;
+}
+
+.botao-excluir {
+  color: var(--warn);
+}
+
+.botao-excluir:hover {
+  color: #832f31;
+}
+
+.estado-vazio {
+  margin: 0;
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+
+
+@media (max-width: 680px) {
+  #formProduto {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .campo:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .tabela-produtos {
+    display: block;
+    overflow-x: auto;
+  }
+}
